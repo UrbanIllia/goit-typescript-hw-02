@@ -1,0 +1,12 @@
+.container {
+  width: 100%;
+  min-height: 100vh;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(15, 32, 39, 0.6),
+      rgba(32, 58, 67, 0.6),
+      rgba(44, 83, 100, 0.6)
+    ),
+    url('./img/124.jpg') center/cover no-repeat;
+}
