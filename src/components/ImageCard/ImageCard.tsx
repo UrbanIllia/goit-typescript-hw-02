@@ -1,4 +1,5 @@
 import css from './ImageCard.module.css';
+import { Image } from '../../types';
 
 type ImageCardProps = {
   image: Image;

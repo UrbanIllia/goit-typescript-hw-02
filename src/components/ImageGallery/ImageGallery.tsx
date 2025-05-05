@@ -1,5 +1,6 @@
 import ImageCard from '../ImageCard/ImageCard';
 import css from './ImageGallery.module.css';
+import { Image } from '../../types';
 
 type ImageGalleryProps = {
   images: Image[];

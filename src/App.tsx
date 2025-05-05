@@ -8,20 +8,7 @@ import ErrorMessage from './components/ErrorMessage/ErrorMessage';
 import ImageModal from './components/ImageModal/ImageModal';
 import { fetchImages } from './api/unsplash';
 import css from './App.module.css';
-
-type Image = {
-  id: string;
-  urls: {
-    small: string;
-    regular: string;
-  };
-  alt_description: string | null;
-  user: {
-    name: string;
-  };
-  likes: number;
-  description: string | null;
-};
+import { Image } from './types'; // Імпорт типу Image
 
 type AppState = {
   query: string;
