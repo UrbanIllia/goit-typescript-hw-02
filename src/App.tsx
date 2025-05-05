@@ -8,7 +8,7 @@ import ErrorMessage from './components/ErrorMessage/ErrorMessage';
 import ImageModal from './components/ImageModal/ImageModal';
 import { fetchImages } from './api/unsplash';
 import css from './App.module.css';
-import { Image } from './types'; // Імпорт типу Image
+import { Image } from './types';
 
 type AppState = {
   query: string;
