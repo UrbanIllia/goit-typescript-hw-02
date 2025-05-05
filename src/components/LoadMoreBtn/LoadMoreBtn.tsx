@@ -1,7 +1,10 @@
-import React from 'react';
 import css from './LoadMoreBtn.module.css';
 
-const LoadMoreBtn = ({ onClick }) => {
+type LoadMoreBtnProps = {
+  onClick: () => void;
+};
+
+const LoadMoreBtn = ({ onClick }: LoadMoreBtnProps) => {
   return (
     <button onClick={onClick} className={css.button}>
       Load more

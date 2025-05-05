@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import css from './ImageSearchBar.module.css';
 
-const ImageSearchBar = ({ onSubmit }) => {
-  const [query, setQuery] = useState('');
+type ImageSearchBarProps = {
+  onSubmit: (query: string) => void;
+};
 
-  const handleSubmit = (e) => {
+const ImageSearchBar = ({ onSubmit }: ImageSearchBarProps) => {
+  const [query, setQuery] = useState<string>('');
+
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!query.trim()) {
       toast.error('Єй! Ну ти чого?! Може введеш щось нормальне?');

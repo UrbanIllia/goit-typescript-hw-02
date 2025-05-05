@@ -1,9 +1,13 @@
-import React from 'react';
 import css from './ImageCard.module.css';
 
-const ImageCard = ({ image, onClick }) => {
+type ImageCardProps = {
+  image: Image;
+  onClick: (image: Image) => void;
+};
+
+const ImageCard = ({ image, onClick }: ImageCardProps) => {
   return (
-    <div className={css.card} onClick={onClick}>
+    <div className={css.card} onClick={() => onClick(image)}>
       <img
         src={image.urls.small}
         alt={image.alt_description || 'Image'}
