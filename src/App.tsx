@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import ImageSearchBar from './components/ImageSearchBar/ImageSearchBar';
 import ImageGallery from './components/ImageGallery/ImageGallery';
@@ -10,95 +10,74 @@ import { fetchImages } from './api/unsplash';
 import css from './App.module.css';
 import { Image } from './types';
 
-type AppState = {
-  query: string;
-  images: Image[];
-  page: number;
-  isLoading: boolean;
-  error: string | null;
-  modalIsOpen: boolean;
-  selectedImage: Image | null;
-};
-
 const App = () => {
-  const [state, setState] = useState<AppState>({
-    query: '',
-    images: [],
-    page: 1,
-    isLoading: false,
-    error: null,
-    modalIsOpen: false,
-    selectedImage: null,
-  });
+  const [query, setQuery] = useState<string>('');
+  const [images, setImages] = useState<Image[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const [selectedImage, setSelectedImage] = useState<Image | null>(null);
 
   useEffect(() => {
-    if (!state.query) return;
+    if (!query) return;
 
     const fetchData = async () => {
-      setState((prev) => ({ ...prev, isLoading: true }));
+      setIsLoading(true);
       try {
-        const data = await fetchImages(state.query, state.page);
-        setState((prev) => ({
-          ...prev,
-          images:
-            state.page === 1 ? data.results : [...prev.images, ...data.results],
-          error:
-            data.results.length === 0
-              ? 'No images found for your query.'
-              : null,
-        }));
+        const data = await fetchImages(query, page);
+        setImages(page === 1 ? data.results : [...images, ...data.results]);
+        setError(
+          data.results.length === 0 ? 'No images found for your query.' : null
+        );
         if (data.results.length === 0) {
           toast.error('No images found for your query.');
         }
       } catch (err) {
-        setState((prev) => ({
-          ...prev,
-          error: 'Failed to fetch images. Please try again later.',
-        }));
+        setError('Failed to fetch images. Please try again later.');
       } finally {
-        setState((prev) => ({ ...prev, isLoading: false }));
+        setIsLoading(false);
       }
     };
 
     fetchData();
-  }, [state.query, state.page]);
+  }, [query, page]);
 
   const handleSearch = (newQuery: string) => {
-    setState((prev) => ({
-      ...prev,
-      query: newQuery,
-      images: [],
-      page: 1,
-      error: null,
-    }));
+    setQuery(newQuery);
+    setImages([]);
+    setPage(1);
+    setError(null);
   };
 
   const handleLoadMore = () => {
-    setState((prev) => ({ ...prev, page: prev.page + 1 }));
+    setPage(page + 1);
   };
 
   const openModal = (image: Image) => {
-    setState((prev) => ({ ...prev, selectedImage: image, modalIsOpen: true }));
+    setSelectedImage(image);
+    setModalIsOpen(true);
   };
 
   const closeModal = () => {
-    setState((prev) => ({ ...prev, modalIsOpen: false, selectedImage: null }));
+    setModalIsOpen(false);
+    setSelectedImage(null);
   };
 
   return (
     <div className={css.container}>
       <Toaster position="top-right" />
       <ImageSearchBar onSubmit={handleSearch} />
-      {state.error && <ErrorMessage message={state.error} />}
-      <ImageGallery images={state.images} onImageClick={openModal} />
-      {state.isLoading && <Loader />}
-      {state.images.length > 0 && !state.isLoading && (
+      {error && <ErrorMessage message={error} />}
+      <ImageGallery images={images} onImageClick={openModal} />
+      {isLoading && <Loader />}
+      {images.length > 0 && !isLoading && (
         <LoadMoreBtn onClick={handleLoadMore} />
       )}
       <ImageModal
-        isOpen={state.modalIsOpen}
+        isOpen={modalIsOpen}
         onRequestClose={closeModal}
-        image={state.selectedImage}
+        image={selectedImage}
       />
     </div>
   );
